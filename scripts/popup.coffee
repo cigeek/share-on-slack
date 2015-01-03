@@ -37,7 +37,11 @@ chrome.tabs.getSelected(null, (tab) ->
   chrome.tabs.executeScript(null, {
       file: 'scripts/description.js'
     }, (res) ->
-      formData.append('content', "> [" + tab.url + "](" + tab.url + ")\n> " + res[0])
-      permalink = createPost(formData)
+      content = "> [" + tab.url + "](" + tab.url + ")\n"
+      content += res[0] if res[0]?
+
+      formData.append('content', content)
+
+      createPost(formData)
   )
 )

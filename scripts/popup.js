@@ -41,8 +41,12 @@
     return chrome.tabs.executeScript(null, {
       file: 'scripts/description.js'
     }, function(res) {
-      var permalink;
-      formData.append('content', "> [" + tab.url + "](" + tab.url + ")\n> " + res[0]);
+      var content, permalink;
+      content = "> [" + tab.url + "](" + tab.url + ")\n";
+      if (res[0] != null) {
+        content += res[0];
+      }
+      formData.append('content', content);
       return permalink = createPost(formData);
     });
   });
