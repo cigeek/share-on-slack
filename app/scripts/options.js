@@ -4,13 +4,11 @@
   var init, restoreData, saveData;
 
   restoreData = function() {
-    document.getElementById('token').value = localStorage.getItem('token');
-    return document.getElementById('channel').value = localStorage.getItem('channel');
+    return document.getElementById('token').value = localStorage.getItem('token');
   };
 
   saveData = function() {
-    localStorage.setItem('token', document.getElementById('token').value);
-    return localStorage.setItem('channel', document.getElementById('channel').value);
+    return localStorage.setItem('token', document.getElementById('token').value);
   };
 
   init = function() {
