@@ -8,6 +8,6 @@ saveData = ->
 
 init = ->
   restoreData()
-  document.getElementById('save').addEventListener('click', saveData);
+  document.getElementById('save').addEventListener('click', saveData)
 
 init()

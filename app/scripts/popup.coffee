@@ -9,17 +9,17 @@ createPost = (formData) ->
     if req.status == 200
       data = JSON.parse(req.responseText)
 
-      if data['ok']
+      if data.ok
         msg.textContent = 'Successfully created. Now opening the page...'
 
-        permalink = data['file']['permalink']
+        permalink = data.file.permalink
         chrome.tabs.create({
           url: permalink
         }, () ->
           msg.textContent = 'Just publish to share!'
         )
       else
-        msg.textContent = 'Error: ' + data['error']
+        msg.textContent = 'Error: ' + data.error
     else
       msg.textContent = 'Unexpected error!'
 
@@ -37,7 +37,7 @@ chrome.tabs.getSelected(null, (tab) ->
   chrome.tabs.executeScript(null, {
       file: 'scripts/description.js'
     }, (res) ->
-      content = "> [" + tab.url + "](" + tab.url + ")\n"
+      content = '> [' + tab.url + '](' + tab.url + ') '
       content += res[0] if res[0]?
 
       formData.append('content', content)
