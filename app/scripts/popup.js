@@ -41,7 +41,7 @@
       file: 'scripts/description.js'
     }, function(res) {
       var content;
-      content = '> [' + tab.url + '](' + tab.url + ') ';
+      content = '[' + tab.url + '](' + tab.url + ')\n';
       if (res[0] != null) {
         content += res[0];
       }
