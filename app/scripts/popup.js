@@ -42,11 +42,7 @@
     }, function(res) {
       var content;
       content = '[' + tab.url + '](' + tab.url + ')\n';
-      if (res[0] != null) {
-        content += res[0];
-      }
-      formData.append('content', content);
-      return createPost(formData);
+      return content += res[0](res[0] != null ? (formData.append('content', content), createPost(formData)) : void 0);
     });
   });
 

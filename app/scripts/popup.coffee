@@ -35,10 +35,10 @@ chrome.tabs.getSelected(null, (tab) ->
   formData.append('title', tab.title)
 
   chrome.tabs.executeScript(null, {
-      file: 'scripts/description.js'
-    }, (res) ->
-      content = '[' + tab.url + '](' + tab.url + ')\n'
-      content += res[0] if res[0]?
+    file: 'scripts/description.js'
+  }, (res) ->
+    content = '[' + tab.url + '](' + tab.url + ')\n'
+    content += res[0] if res[0]?
 
       formData.append('content', content)
 

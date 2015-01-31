@@ -12,14 +12,20 @@
     <body>
         <h1>Options</h1>
 
-        <table>
-          <tr>
-            <td><label>Token</label></td>
-            <td><input type="text"  size="50" id="token" name="token" placeholder="xxxx-xxxxxxxxxx-xxxxxxxxxx-xxxxxxxxxx-xxxxxx"></td>
-          </tr>
-        </table>
+        <form id="option-form">
+          <table>
+            <tr>
+              <td><label>Token</label></td>
+              <td><input type="text" size="50" id="token" name="token" placeholder="xxxx-xxxxxxxxxx-xxxxxxxxxx-xxxxxxxxxx-xxxxxx"></td>
+            </tr>
+            <tr>
+              <td><label>Channel</label></td>
+              <td><input type="text" size="25" id="channel" name="channel" placeholder="general"></td>
+            </tr>
+          </table>
+        </form>
 
-        <button id="save">Save</button>
+        <button id="save">Save</button> <span id="msg"></span>
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
