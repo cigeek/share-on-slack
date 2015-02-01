@@ -18,14 +18,19 @@
         <legend>New post</legend>
         <ul>
           <li class="field">
-            <input type="text" name="title" id="title" class="text" disabled>
-            <textarea name="desc" id="desc" class="textarea" disabled></textarea>
+            <input type="text" name="title" id="title" class="text" readonly>
+            <textarea name="desc" id="desc" class="textarea" readonly></textarea>
           </li>
           <li class="field">
             <label>Comment (Optional)</label>
-            <textarea name="initial_comment" class="input textarea"></textarea>
+            <textarea name="initial_comment" id="comment" class="input textarea" autofocus></textarea>
           </li>
         </ul>
+        <input type="hidden" name="token" id="token">
+        <input type="hidden" name="channels" id="channels">
+        <input type="hidden" name="content" id="content">
+        <input type="hidden" name="filetype" value="post">
+        <input type="hidden" name="filename" value="share-on-slack">
 
         <div class="medium primary btn">
           <a id="post" href="#">Post</a>
@@ -33,13 +38,8 @@
         <div class="medium default btn">
           <a id="cancel" href="#">Cancel</a>
         </div>
+        <div id="msg" class="alert"></div>
       </fieldset>
-
-      <input type="hidden" id="token" name="token">
-      <input type="hidden" id="channel" name="channels">
-      <input type="hidden" id="content" name="content">
-      <input type="hidden" name="filetype" value="post">
-      <input type="hidden" name="filename" value="share-on-slack">
     </form>
   </div>
   <!-- build:js scripts/vendor.js -->

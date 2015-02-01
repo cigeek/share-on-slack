@@ -1,49 +1,63 @@
 (function() {
   'use strict';
-  var createPost, msg;
+  var $, createPost, createSuccess, updateMessage;
 
-  msg = document.getElementById('msg');
+  $ = function(id) {
+    return document.getElementById(id);
+  };
 
-  createPost = function(formData) {
+  createPost = function(callback) {
     var req;
+    updateMessage('Creating a new post...');
     req = new XMLHttpRequest();
-    req.addEventListener('readystatechange', function() {
-      var data, permalink;
-      if (req.status === 200) {
-        data = JSON.parse(req.responseText);
-        if (data.ok) {
-          msg.textContent = 'Successfully created. Now opening the page...';
-          permalink = data.file.permalink;
-          return chrome.tabs.create({
-            url: permalink
-          }, function() {
-            return msg.textContent = 'Just publish to share!';
-          });
-        } else {
-          return msg.textContent = 'Error: ' + data.error;
-        }
-      } else {
-        return msg.textContent = 'Unexpected error!';
-      }
-    });
-    req.open('POST', 'https://slack.com/api/files.upload', false);
-    return req.send(formData);
+    req.callback = callback;
+    req.onload = createSuccess;
+    req.onerror = function() {
+      return updateMessage('Error! ' + this.statusText);
+    };
+    req.open('POST', 'https://slack.com/api/files.upload', true);
+    return req.send(new FormData($('post-form')));
+  };
+
+  createSuccess = function() {
+    var res;
+    res = JSON.parse(this.responseText);
+    if (res.ok) {
+      updateMessage('Successfully created!');
+      return this.callback.apply();
+    } else {
+      return updateMessage('Error! ' + res.error);
+    }
   };
 
   chrome.tabs.getSelected(null, function(tab) {
-    var formData;
-    formData = new FormData();
-    formData.append('token', localStorage.getItem('token'));
-    formData.append('filetype', 'post');
-    formData.append('filename', 'link');
-    formData.append('title', tab.title);
-    return chrome.tabs.executeScript(null, {
+    $('title').value = tab.title;
+    $('token').value = localStorage.getItem('token');
+    $('channels').value = localStorage.getItem('channelId');
+    chrome.tabs.executeScript(null, {
       file: 'scripts/description.js'
-    }, function(res) {
-      var content;
-      content = '[' + tab.url + '](' + tab.url + ')\n';
-      return content += res[0](res[0] != null ? (formData.append('content', content), createPost(formData)) : void 0);
+    }, function(descriptions) {
+      var content, prefix;
+      prefix = '[' + tab.url + '](' + tab.url + ')\n';
+      if (descriptions[0] != null) {
+        content = descriptions[0].slice(0, 140) + '...';
+      } else {
+        content = "No summary.";
+      }
+      $('desc').textContent = content.replace(/[\n\r]/g, " ");
+      $('content').value = prefix + content;
+      return $('comment').focus();
+    });
+    $('post').addEventListener('click', function() {
+      return createPost(window.close);
+    });
+    return $('cancel').addEventListener('click', function() {
+      return window.close();
     });
   });
+
+  updateMessage = function(msg) {
+    return $('msg').textContent = msg;
+  };
 
 }).call(this);

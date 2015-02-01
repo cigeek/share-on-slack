@@ -3,8 +3,6 @@
   var getContentByMetaTagNames, tagNames,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  tagNames = ['description', 'twitter:descript', 'og:description'];
-
   getContentByMetaTagNames = function(tagNames) {
     var i, nodes, _i, _ref, _ref1, _ref2;
     nodes = document.getElementsByTagName('meta');
@@ -15,6 +13,8 @@
     }
     return null;
   };
+
+  tagNames = ['description', 'twitter:descript', 'og:description'];
 
   return getContentByMetaTagNames(tagNames);
 

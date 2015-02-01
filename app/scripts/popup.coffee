@@ -1,47 +1,54 @@
 'use strict';
 
-msg = document.getElementById('msg')
+$ = (id) ->
+  document.getElementById(id)
 
-createPost = (formData) ->
+createPost = (callback) ->
+  updateMessage('Creating a new post...')
+
   req = new XMLHttpRequest()
+  req.callback = callback
+  req.onload = createSuccess
+  req.onerror = () ->
+    updateMessage('Error! ' + this.statusText)
 
-  req.addEventListener 'readystatechange', ->
-    if req.status == 200
-      data = JSON.parse(req.responseText)
+  req.open 'POST', 'https://slack.com/api/files.upload', true
+  req.send(new FormData($('post-form')))
 
-      if data.ok
-        msg.textContent = 'Successfully created. Now opening the page...'
+createSuccess = ->
+  res = JSON.parse(this.responseText)
 
-        permalink = data.file.permalink
-        chrome.tabs.create({
-          url: permalink
-        }, () ->
-          msg.textContent = 'Just publish to share!'
-        )
-      else
-        msg.textContent = 'Error: ' + data.error
-    else
-      msg.textContent = 'Unexpected error!'
-
-  req.open 'POST', 'https://slack.com/api/files.upload', false
-  req.send(formData)
+  if res.ok
+    updateMessage('Successfully created!')
+    this.callback.apply()
+  else
+    updateMessage('Error! ' + res.error)
 
 chrome.tabs.getSelected(null, (tab) ->
-  formData = new FormData()
-
-  formData.append('token', localStorage.getItem('token'))
-  formData.append('filetype', 'post')
-  formData.append('filename', 'link')
-  formData.append('title', tab.title)
+  $('title').value = tab.title
+  $('token').value = localStorage.getItem('token')
+  $('channels').value = localStorage.getItem('channelId')
 
   chrome.tabs.executeScript(null, {
     file: 'scripts/description.js'
-  }, (res) ->
-    content = '[' + tab.url + '](' + tab.url + ')\n'
-    content += res[0] if res[0]?
+  }, (descriptions) ->
+    prefix = '[' + tab.url + '](' + tab.url + ')\n'
 
-      formData.append('content', content)
+    if descriptions[0]?
+      content = descriptions[0].slice(0, 140) + '...'
+    else
+      content = "No summary."
 
-      createPost(formData)
+    $('desc').textContent = content.replace(/[\n\r]/g, " ")
+    $('content').value = prefix + content
+    $('comment').focus()
   )
+
+  $('post').addEventListener 'click', () ->
+    createPost(window.close)
+  $('cancel').addEventListener 'click', () ->
+    window.close()
 )
+
+updateMessage = (msg) ->
+  $('msg').textContent = msg
