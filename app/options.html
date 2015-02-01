@@ -1,39 +1,48 @@
-<!doctype html>
-<html>
-    <head>
-        <!-- build:css styles/vendor.css -->
-        <!-- bower:css -->
-        <!-- endbower -->
-        <!-- endbuild -->
-        <!-- build:css styles/main.css -->
-        <link href="styles/main.css" rel="stylesheet">
-        <!-- endbuild -->
-    </head>
-    <body>
-        <h1>Options</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Options - Share on Slack</title>
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <link href="bower_components/gumby/css/gumby.css" rel="stylesheet">
+  <!-- endbuild -->
+  <!-- build:css -->
+  <!-- endbuild -->
+</head>
+<body>
+  <div class="row">
+    <form id="option-form">
+      <fieldset>
+        <legend>Options</legend>
+        <ul>
+          <li class="field">
+            <label class="inline" for="token">Token</label>
+            <input type="text" name="token" id="token" class="wide text input" placeholder="xxxx-xxxxxxxxxx-xxxxxxxxxx-xxxxxxxxxx-xxxxxx">
+          </li>
+          <li class="field">
+            <label class="inline" for="channel">Channel</label>
+            <input type="text" name="channel" id="channel" class="wide text input" placeholder="general">
+          </li>
+        </ul>
 
-        <form id="option-form">
-          <table>
-            <tr>
-              <td><label>Token</label></td>
-              <td><input type="text" size="50" id="token" name="token" placeholder="xxxx-xxxxxxxxxx-xxxxxxxxxx-xxxxxxxxxx-xxxxxx"></td>
-            </tr>
-            <tr>
-              <td><label>Channel</label></td>
-              <td><input type="text" size="25" id="channel" name="channel" placeholder="general"></td>
-            </tr>
-          </table>
-        </form>
+        <div class="medium primary btn">
+          <a id="save" href="#">Save</a>
+        </div>
+        <span id="msg" class="alert" style="margin-left:16px"></span>
+      </fieldset>
+    </form>
+  </div>
 
-        <button id="save">Save</button> <span id="msg"></span>
 
-        <!-- build:js scripts/vendor.js -->
-        <!-- bower:js -->
-        <!-- endbower -->
-        <!-- endbuild -->
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <!-- endbower -->
+  <!-- endbuild -->
 
-        <!-- build:js scripts/options.js -->
-        <script src="scripts/options.js"></script>
-        <!-- endbuild -->
-    </body>
+  <!-- build:js scripts/options.js -->
+  <script src="scripts/options.js"></script>
+  <!-- endbuild -->
+</body>
 </html>

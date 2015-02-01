@@ -1,6 +1,8 @@
 {
   "name": "share-on-slack",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "gumby": "~2.6.3"
+  },
   "devDependencies": {}
 }
