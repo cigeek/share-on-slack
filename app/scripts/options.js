@@ -1,6 +1,6 @@
 (function() {
   'use strict';
-  var $, fetchChannelList, findChannelId, init, loadOptions, saveOptions, updateMessage;
+  var $, extractChannelInfo, fetchChannelList, fetchSuccess, init, loadOptions, saveOptions, updateMessage;
 
   $ = function(id) {
     return document.getElementById(id);
@@ -29,7 +29,7 @@
     updateMessage('Fetching channel list...');
     req = new XMLHttpRequest();
     req.callback = callback;
-    req.onload = findChannelId;
+    req.onload = fetchSuccess;
     req.onerror = function() {
       return updateMessage('Error! ' + this.statusText);
     };
@@ -37,22 +37,28 @@
     return req.send(new FormData($('option-form')));
   };
 
-  findChannelId = function() {
-    var channel, i, res, _i, _ref;
+  fetchSuccess = function() {
+    var channel, channelInfo, res;
     res = JSON.parse(this.responseText);
     channel = $('channel').value;
     if (res.ok) {
-      for (i = _i = 0, _ref = res.channels.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        if (res.channels[i].name === channel) {
-          localStorage.setItem('channelId', res.channels[i].id);
-          this.callback.apply();
-          return;
-        }
-      }
-      return updateMessage('Channel not found.');
+      channelInfo = extractChannelInfo(res.channels, channel);
+      localStorage.setItem('channelId', channelInfo.id);
+      return this.callback.apply();
     } else {
       return updateMessage('Error! ' + res.error);
     }
+  };
+
+  extractChannelInfo = function(channels, channel) {
+    var i, _i, _ref;
+    for (i = _i = 0, _ref = channels.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+      if (channels[i].name === channel) {
+        return channels[i];
+      }
+    }
+    updateMessage('Channel not found.');
+    return nil;
   };
 
   updateMessage = function(msg) {
